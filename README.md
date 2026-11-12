@@ -13,7 +13,7 @@ Requires a JDK, version 17 or newer (`java -version` and `javac -version` should
 .\run.bat
 ```
 
-On macOS/Linux use `./run.sh`. The script compiles `src/` into `out/`, starts the server and opens <http://127.0.0.1:5000> (in Microsoft Edge if it is installed, otherwise your default browser). Stop the server with `Ctrl+C`.
+On macOS/Linux use `./run.sh`. The script compiles `src/` into `out/`, starts the server and opens <https://tuibaa-bhat.github.io/CPU-scheduling-visualization/> (in Microsoft Edge if it is installed, otherwise your default browser). Stop the server with `Ctrl+C`.
 
 Options: `--no-browser` (or env `NO_BROWSER=1`) skips opening the browser; env `PORT=8080` changes the port. Run the self-test with `run-tests.bat` / `./run-tests.sh`.
 
