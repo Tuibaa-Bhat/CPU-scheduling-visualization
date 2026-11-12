@@ -1,141 +1,180 @@
-<<<<<<< HEAD
 # CPU Scheduling Studio
 
-A small Java app for entering processes, running common CPU scheduling policies, and comparing their Gantt charts and timing statistics. The backend is plain Java (JDK only, no libraries); the web interface in `templates/index.html` is served unchanged.
+A Java-based CPU Scheduling Visualizer that allows users to enter processes, execute common CPU scheduling algorithms, and compare their Gantt charts and performance statistics.
 
-Use **Run schedule** to inspect one policy or **Compare all policies** to run FCFS, SJF, Priority, and Round Robin on the same process data. The comparison includes average waiting, turnaround and response times, CPU utilization, and makespan. The process table includes first start and response time, and the Gantt chart shows idle intervals and Round Robin slices.
+The backend is developed using plain Java (JDK only, without external libraries), and the frontend uses HTML, CSS, and JavaScript.
 
-## Run locally
+## Live Website
 
-Requires a JDK, version 17 or newer (`java -version` and `javac -version` should both work).
+**Visit the CPU Scheduling Visualizer here:**
 
-```powershell
-.\run.bat
+https://tuibaa-bhat.github.io/CPU-scheduling-visualization/
+
+## GitHub Repository
+
+https://github.com/Tuibaa-Bhat/CPU-scheduling-visualization
+
+## Features
+
+- Run individual CPU scheduling algorithms.
+- Compare all scheduling algorithms using the same process data.
+- Generate Gantt charts to visualize process execution.
+- Calculate average waiting time, turnaround time, and response time.
+- Display CPU utilization and makespan.
+- Support idle intervals and Round Robin time slices.
+- View process completion times and scheduling statistics.
+
+## Scheduling Algorithms
+
+1. **FCFS (First Come First Serve):** Executes processes in order of arrival time.
+2. **SJF (Shortest Job First):** Selects the available process with the shortest burst time.
+3. **Priority Scheduling:** Executes the available process with the highest priority (lowest positive priority number).
+4. **Round Robin:** Uses a configurable time quantum to execute processes in turns.
+
+## Technologies Used
+
+- Java (JDK 17 or newer)
+- HTML5
+- CSS3
+- JavaScript
+- Java HTTP Server
+- JSON
+
+## Run Locally
+
+### Requirements
+
+Install JDK 17 or newer.
+
+Check Java installation:
+
+```bash
+java -version
+javac -version
 ```
 
-On macOS/Linux use `./run.sh`. The script compiles `src/` into `out/`, starts the server and opens <https://tuibaa-bhat.github.io/CPU-scheduling-visualization/> (in Microsoft Edge if it is installed, otherwise your default browser). Stop the server with `Ctrl+C`.
+### Windows
 
-Options: `--no-browser` (or env `NO_BROWSER=1`) skips opening the browser; env `PORT=8080` changes the port. Run the self-test with `run-tests.bat` / `./run-tests.sh`.
+Open the project folder in the terminal and execute:
 
-Without the scripts:
-
-```
-javac -d out src/cpuscheduler/*.java
-java -cp out cpuscheduler.App
+```cmd
+run.bat
 ```
 
-Always start it from this folder (the one containing `templates/` and `static/`), or pass `-Dapp.dir=<this folder>`.
+### macOS / Linux
 
-## Policies
+Execute:
 
-- **FCFS**: non-preemptive, ordered by arrival time; ties keep the input order.
-- **SJF**: non-preemptive; chooses the shortest burst among processes that have arrived.
-- **Priority**: non-preemptive; the lowest positive priority number wins. Ties use arrival time, then input order.
-- **Round Robin**: preemptive, with a configurable positive integer quantum. Processes that arrive during a time slice join the ready queue before the running process is requeued.
+```bash
+./run.sh
+```
 
-The app reports completion time, turnaround time (`completion − arrival`), waiting time (`turnaround − burst`), average waiting and turnaround times, and CPU utilization. Idle gaps are included in the Gantt chart. All times use abstract integer units, and the model has one CPU.
+The script compiles the Java source files into the `out/` directory, starts the local server, and opens the application in your browser.
 
-## HTTP endpoints
+The local application runs at:
 
-- `GET /` — the web interface (`POST /` returns the same page).
-- `GET /static/...` — files from `static/`.
-- `GET /health` — JSON status.
-- `POST /api/schedule` — runs a simulation and returns JSON. Form-encoded fields: `algorithm` (FCFS, SJF, Priority, RR), `action` (`calculate` or `compare`), `process_count` (3, 5, 8, 10 or 15), `quantum`, and one `pid`, `arrival`, `burst`, `priority` per process.
+```text
+http://127.0.0.1:5000
+```
 
-## Project files
+Stop the server using `Ctrl + C`.
 
-- `src/cpuscheduler/Scheduler.java` — scheduling algorithms, validation and timing calculations.
-- `src/cpuscheduler/Analysis.java` — performance metrics, same-input comparison and automatic observations.
-- `src/cpuscheduler/ScheduleService.java` — form validation and the simulation workflow.
-- `src/cpuscheduler/App.java` — HTTP server and routes (built on the JDK's `com.sun.net.httpserver`).
-- `src/cpuscheduler/Json.java` — small JSON writer.
-- `test/cpuscheduler/SchedulerTest.java` — hand-calculated self-test.
-- `templates/index.html` — responsive interface, Gantt chart, and results table.
-- `static/` — additional stylesheet and script.
-- `REPORT_TEMPLATE.md` — reproducible demonstration procedure, evidence checklist, analysis prompts, and team contribution record for the course rubric.
+### Additional Options
 
-## Assessment evidence
+- `--no-browser`: Starts the server without automatically opening a browser.
+- `NO_BROWSER=1`: Prevents automatic browser opening.
+- `PORT=8080`: Changes the server port.
 
-The project supports simulation execution through configurable inputs and four policies; observation through a Gantt chart and per-process/aggregate metrics; and comparative analysis through the same-input policy comparison. Use `REPORT_TEMPLATE.md` to record your actual runs, screenshots, hand calculations, workload-based conclusions, environment, and individual contributions. The report prompts are not pre-filled with fabricated experiment results: complete them from your demonstration and be ready to explain your own work.
+Run the self-test using:
+
+```cmd
+run-tests.bat
+```
+
+On macOS/Linux:
+
+```bash
+./run-tests.sh
+```
+
+## Project Structure
+
+```text
+CPU-Scheduling-Studio/
+│
+├── src/
+│   └── cpuscheduler/
+│       ├── Analysis.java
+│       ├── App.java
+│       ├── Json.java
+│       ├── Scheduler.java
+│       └── ScheduleService.java
+│
+├── static/
+│   ├── script.js
+│   └── style.css
+│
+├── templates/
+│   └── index.html
+│
+├── test/
+│   └── cpuscheduler/
+│       └── SchedulerTest.java
+│
+├── out/
+├── index.html
+├── run.bat
+├── run.sh
+├── run-tests.bat
+├── run-tests.sh
+├── README.md
+└── REPORT_TEMPLATE.md
+```
+
+## HTTP Endpoints
+
+| Endpoint | Description |
+|---|---|
+| `GET /` | Displays the web interface |
+| `GET /health` | Returns server health status |
+| `GET /static/...` | Serves CSS and JavaScript files |
+| `POST /api/schedule` | Executes scheduling simulations |
+
+## Performance Metrics
+
+The application calculates:
+
+- Completion Time
+- Turnaround Time
+- Waiting Time
+- Response Time
+- Average Waiting Time
+- Average Turnaround Time
+- CPU Utilization
+- Makespan
 
 ## Project Contributors
 
-- Chandra Prakash – Developer
-- Tuibaa ALtaf Bhat – Developer
+- **Chandra Prakash** – Developer
+- **Tuibaa Altaf Bhat** – Developer
 
 ## Team Members
 
-This project was collaboratively developed by
-[ChandraPrakash-1103](https://github.com/ChandraPrakash-1103)
-and [Tuibaa-Bhat](https://github.com/Tuibaa-Bhat).
-=======
-# CPU Scheduling Studio
+This project was collaboratively developed by:
 
-A small Java app for entering processes, running common CPU scheduling policies, and comparing their Gantt charts and timing statistics. The backend is plain Java (JDK only, no libraries); the web interface in `templates/index.html` is served unchanged.
+- [ChandraPrakash-1103](https://github.com/ChandraPrakash-1103)
+- [Tuibaa-Bhat](https://github.com/Tuibaa-Bhat)
 
-Use **Run schedule** to inspect one policy or **Compare all policies** to run FCFS, SJF, Priority, and Round Robin on the same process data. The comparison includes average waiting, turnaround and response times, CPU utilization, and makespan. The process table includes first start and response time, and the Gantt chart shows idle intervals and Round Robin slices.
+## Assessment Evidence
 
-## Run locally
+The project demonstrates four CPU scheduling algorithms, Gantt chart visualization, process performance metrics, and comparative analysis.
 
-Requires a JDK, version 17 or newer (`java -version` and `javac -version` should both work).
+Refer to `REPORT_TEMPLATE.md` for the demonstration procedure, screenshots checklist, hand calculations, analysis prompts, and team contribution details.
 
-```powershell
-.\run.bat
-```
+Actual experiment results should be recorded after running and testing the application.
 
-On macOS/Linux use `./run.sh`. The script compiles `src/` into `out/`, starts the server and opens <http://127.0.0.1:5000> (in Microsoft Edge if it is installed, otherwise your default browser). Stop the server with `Ctrl+C`.
+## Deployment Information
 
-Options: `--no-browser` (or env `NO_BROWSER=1`) skips opening the browser; env `PORT=8080` changes the port. Run the self-test with `run-tests.bat` / `./run-tests.sh`.
+The live website is published using GitHub Pages.
 
-Without the scripts:
-
-```
-javac -d out src/cpuscheduler/*.java
-java -cp out cpuscheduler.App
-```
-
-Always start it from this folder (the one containing `templates/` and `static/`), or pass `-Dapp.dir=<this folder>`.
-
-## Policies
-
-- **FCFS**: non-preemptive, ordered by arrival time; ties keep the input order.
-- **SJF**: non-preemptive; chooses the shortest burst among processes that have arrived.
-- **Priority**: non-preemptive; the lowest positive priority number wins. Ties use arrival time, then input order.
-- **Round Robin**: preemptive, with a configurable positive integer quantum. Processes that arrive during a time slice join the ready queue before the running process is requeued.
-
-The app reports completion time, turnaround time (`completion − arrival`), waiting time (`turnaround − burst`), average waiting and turnaround times, and CPU utilization. Idle gaps are included in the Gantt chart. All times use abstract integer units, and the model has one CPU.
-
-## HTTP endpoints
-
-- `GET /` — the web interface (`POST /` returns the same page).
-- `GET /static/...` — files from `static/`.
-- `GET /health` — JSON status.
-- `POST /api/schedule` — runs a simulation and returns JSON. Form-encoded fields: `algorithm` (FCFS, SJF, Priority, RR), `action` (`calculate` or `compare`), `process_count` (3, 5, 8, 10 or 15), `quantum`, and one `pid`, `arrival`, `burst`, `priority` per process.
-
-## Project files
-
-- `src/cpuscheduler/Scheduler.java` — scheduling algorithms, validation and timing calculations.
-- `src/cpuscheduler/Analysis.java` — performance metrics, same-input comparison and automatic observations.
-- `src/cpuscheduler/ScheduleService.java` — form validation and the simulation workflow.
-- `src/cpuscheduler/App.java` — HTTP server and routes (built on the JDK's `com.sun.net.httpserver`).
-- `src/cpuscheduler/Json.java` — small JSON writer.
-- `test/cpuscheduler/SchedulerTest.java` — hand-calculated self-test.
-- `templates/index.html` — responsive interface, Gantt chart, and results table.
-- `static/` — additional stylesheet and script.
-- `REPORT_TEMPLATE.md` — reproducible demonstration procedure, evidence checklist, analysis prompts, and team contribution record for the course rubric.
-
-## Assessment evidence
-
-The project supports simulation execution through configurable inputs and four policies; observation through a Gantt chart and per-process/aggregate metrics; and comparative analysis through the same-input policy comparison. Use `REPORT_TEMPLATE.md` to record your actual runs, screenshots, hand calculations, workload-based conclusions, environment, and individual contributions. The report prompts are not pre-filled with fabricated experiment results: complete them from your demonstration and be ready to explain your own work.
-
-## Project Contributors
-
-- Chandra Prakash – Developer
-- Tuibaa ALtaf Bhat – Developer
-
-## Team Members
-
-This project was collaboratively developed by
-[ChandraPrakash-1103](https://github.com/ChandraPrakash-1103)
-and [Tuibaa-Bhat](https://github.com/Tuibaa-Bhat).
->>>>>>> 7addbcb3072f767c6c36db92f4a0d6fee47c93e8
+**Live URL:** https://tuibaa-bhat.github.io/CPU-scheduling-visualization/
